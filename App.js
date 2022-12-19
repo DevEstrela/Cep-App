@@ -1,117 +1,77 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
+import React, {useState, useEffect} from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, TextInput } from 'react-native';
+import axios from 'axios';
+import Result from './src/Result';
 
-import React from 'react';
-import type {Node} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+export default function App() {
+  const [cep, setCep ] = useState(null)
+ return (
+   <SafeAreaView style={styles.container}>
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+      <View style={{alignItems: 'center', marginTop: 25}}>
 
-/* $FlowFixMe[missing-local-annot] The type annotation(s) required by Flow's
- * LTI update could not be added via codemod */
-const Section = ({children, title}): Node => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
+          <Text style={styles.title}> Digite o cep desejado</Text>
+
+          <TextInput
+            style={styles.input}
+            placeholder="Ex: 08696282"
+            value={cep}
+            onChanceText={(text) => setCep(text)}
+            keyboardType='numeric'
+          />
+
+      <View style={styles.areaBtn}>
+          <TouchableOpacity style={[styles.button, {backgroundColor: '#1c75cd'}]}>
+            <Text style={styles.textButton}>Buscar</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={[styles.button, {backgroundColor: '#cd3e1c'}]}>
+            <Text style={styles.textButton}>Limpar</Text>
+          </TouchableOpacity>
+      </View>
+          
+        
+
+      </View>
+
+        <Result/>
+        
+   </SafeAreaView>
   );
-};
-
-const App: () => Node = () => {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.js</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
-};
-
+}  
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  container:{
+    flex: 1,
+    padding: 10
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  title:{
+    color: '#000',
+    fontSize: 25,
+    fontWeight: 'bold'
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
+  input:{
+    borderWidth: 1,
+    height: 35,
+    width: '90%',
+    marginTop: 30,
+    padding: 10
   },
-  highlight: {
-    fontWeight: '700',
+  areaBtn:{
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginTop: 15,
+    width: '100%',
+      
   },
-});
-
-export default App;
+  button:{
+    borderRadius: 5,
+    width: '25%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 40,
+  },
+  textButton:{
+    color: '#FFF'
+  }
+})
