@@ -1,12 +1,46 @@
-import React, {useState, useEffect} from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, TextInput } from 'react-native';
-import axios from 'axios';
+import React, {useState, useRef, useReducer} from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, TextInput, Keyboard } from 'react-native'; 
 import Result from './src/Result';
+import api from './src/services/api';
 
 export default function App() {
-  const [cep, setCep ] = useState(null)
+const [cep, setCep ] = useState('');  //Const que é atribuido o campo de cep
+const inputRef = useRef(null);   //Vai referenciar o focus no input
+
+const [cepUser, setCepUser] = useState(null);  //Armazenado os dados da requisição da API
+
+  function limpar(){
+    setCep('');                       //Limpa o campo
+    inputRef.current.focus();         //Da o focus no campo 
+    setCepUser(null)                  //Retorna a requisição nulla para limpar a pesquisa
+  }
+
+  async function buscar(){
+    if(cep === ''){       //Verificação de campo digitado
+      alert('Digite um numero de cep')
+      setCep('')
+      return;
+    }
+
+            //Caso de sucesso e erro try e catch
+    try { 
+      const response = await api.get(`/${cep}/json`)        //Requisição http atribuindo o cep digitado
+
+      setCepUser(response.data)     //Atribui o resultado da requisição ne variavel
+
+      Keyboard.dismiss();     //Garante que o teclado será fechado
+
+    } catch (error) {
+      alert('ERRO: ' + error)
+    }
+
+
+
+
+  }
+
  return (
-   <SafeAreaView style={styles.container}>
+   <View style={styles.container}>
 
       <View style={{alignItems: 'center', marginTop: 25}}>
 
@@ -14,29 +48,33 @@ export default function App() {
 
           <TextInput
             style={styles.input}
-            placeholder="Ex: 08696282"
             value={cep}
-            onChanceText={(text) => setCep(text)}
-            keyboardType='numeric'
+            onChangeText={ (text) => setCep(text)}
+            keyboardType="numeric"
+            ref={inputRef}
           />
 
       <View style={styles.areaBtn}>
-          <TouchableOpacity style={[styles.button, {backgroundColor: '#1c75cd'}]}>
+          <TouchableOpacity style={[styles.button, {backgroundColor: '#1c75cd'}]} onPress={buscar}>
             <Text style={styles.textButton}>Buscar</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={[styles.button, {backgroundColor: '#cd3e1c'}]}>
+          <TouchableOpacity style={[styles.button, {backgroundColor: '#cd3e1c'}]}  onPress={limpar}>
             <Text style={styles.textButton}>Limpar</Text>
           </TouchableOpacity>
       </View>
           
         
 
-      </View>
+      </View> 
 
-        <Result/>
-        
-   </SafeAreaView>
+        {cepUser &&     //abre apenas quando tiver valor da requisição
+
+          <Result cepUser={cepUser}/>  //componente externo do resultado, levando como props o resultado
+
+        }
+
+   </View>
   );
 }  
 const styles = StyleSheet.create({

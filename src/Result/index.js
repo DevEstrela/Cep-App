@@ -1,14 +1,16 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-export default function Result() {
+            //Recebe por meios das props o resultado e imprime na tela
+
+export default function Result(props) {
  return (
    <View style={styles.container}>
-        <Text style={styles.itemText}>CEP: 08696282</Text>
-        <Text style={styles.itemText}>Logradouro: rua sua mae</Text>
-        <Text style={styles.itemText}>Bairro: Jardim Varan</Text>
-        <Text style={styles.itemText}>Cidade: Suzano</Text>
-        <Text style={styles.itemText}>Estado: SM</Text>
+        <Text style={styles.itemText}>CEP: {props.cepUser.cep}</Text>
+        <Text style={styles.itemText}>Logradouro: {props.cepUser.logradouro}</Text>
+        <Text style={styles.itemText}>Bairro: {props.cepUser.bairro}</Text>
+        <Text style={styles.itemText}>Cidade: {props.cepUser.localidade}</Text>
+        <Text style={styles.itemText}>Estado: {props.cepUser.uf}</Text>
    </View>
   );
 }
